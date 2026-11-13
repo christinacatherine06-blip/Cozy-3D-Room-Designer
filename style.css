@@ -1,0 +1,8 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: #f7f1f4; font-family: system-ui, sans-serif; color: #463b44; text-align: center; }
+header { padding: 16px 10px 6px; }
+h1 { margin-bottom: 4px; }
+header p { margin-top: 0; color: #766774; }
+main { padding: 10px 20px 30px; }
+canvas { display: block; width: min(100%, 960px); height: auto; margin: auto; border-radius: 14px; box-shadow: 0 10px 30px #39293b25; }
+#status { min-height: 1.5em; }
