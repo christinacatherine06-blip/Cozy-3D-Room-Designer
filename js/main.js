@@ -8,6 +8,8 @@ import {
 } from './furniture.js';
 
 import { createClockRenderer } from './clockAnimation.js';
+import { createCamera } from './camera.js';
+import { setupCameraControls } from './cameraControls.js';
 
 const canvas = document.getElementById('gl-canvas');
 const status = document.getElementById('status');
@@ -150,28 +152,61 @@ const projection = perspective(
   100
 );
 
-// Move the camera closer so the room appears larger.
-const view = lookAt(
-  [12, 9, 13],
-  [0, 1.5, 0],
-  [0, 1, 0]
-);
+// Phase 7: Interactive orbit camera
+const camera = createCamera();
 
+// Connect mouse and trackpad controls
+setupCameraControls(canvas, camera);
 
-gl.uniformMatrix4fv(gl.getUniformLocation(program, 'uMVP'), false, multiply(projection, view));
+// Find the shader's transformation uniform
+const mvpLocation = gl.getUniformLocation(program, 'uMVP');
 
 // Phase 6: Render the bedroom and animate the wall clock
 
 const drawClock = createClockRenderer(gl, program);
 
+
 function render() {
+  // Keep the canvas sharp when the window changes size
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+  const width = Math.round(canvas.clientWidth * pixelRatio);
+  const height = Math.round(canvas.clientHeight * pixelRatio);
+
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
+
+  gl.viewport(0, 0, canvas.width, canvas.height);
+
+  // Recalculate projection for the canvas size
+  const currentProjection = perspective(
+    Math.PI / 4,
+    canvas.width / canvas.height,
+    0.1,
+    100
+  );
+
+  // Calculate the new camera position
+  const view = lookAt(
+    camera.getEye(),
+    camera.getTarget(),
+    [0, 1, 0]
+  );
+
+  // Send the updated transformation to GLSL
+  gl.useProgram(program);
+  gl.uniformMatrix4fv(
+    mvpLocation,
+    false,
+    multiply(currentProjection, view)
+  );
+
   // Clear the previous frame
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  // Use our custom GLSL shader program
-  gl.useProgram(program);
-
-  // Draw the room and all static furniture
+  // Draw the bedroom and all furniture
   gl.bindVertexArray(vao);
   gl.drawArrays(
     gl.TRIANGLES,
@@ -179,12 +214,16 @@ function render() {
     positions.length / 3
   );
 
-  // Draw the clock using the current time
+  // Draw the animated clock
   drawClock(new Date());
 
-  // Request the next animation frame
+  // Continue rendering
   requestAnimationFrame(render);
 }
+
+// Start the render loop
+requestAnimationFrame(render);
+
 
 // Start the animation
 requestAnimationFrame(render);
