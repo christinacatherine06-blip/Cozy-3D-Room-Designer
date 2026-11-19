@@ -1,5 +1,11 @@
 // Phase 2: Draw a cozy room using raw WebGL2, GLSL, and triangle buffers.
-import { addBed } from './furniture.js';
+import {
+  addBed,
+  addStudyDesk,
+  addStudyChair,
+  addWardrobe,
+  addRug
+} from './furniture.js';
 
 const canvas = document.getElementById('gl-canvas');
 const status = document.getElementById('status');
@@ -77,6 +83,12 @@ quad(
 
 // Phase 3: Add a 3D bed to the room.
 addBed(positions, colors);
+// Phase 4: Add the cute study furniture.
+addStudyDesk(positions, colors);
+addStudyChair(positions, colors);
+// Phase 5: Add the pastel wardrobe.
+addWardrobe(positions, colors);
+addRug(positions, colors);
 
 const vao = gl.createVertexArray();
 gl.bindVertexArray(vao);
