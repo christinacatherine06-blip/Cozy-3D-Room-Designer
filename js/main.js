@@ -1,4 +1,6 @@
 // Phase 2: Draw a cozy room using raw WebGL2, GLSL, and triangle buffers.
+import { addBed } from './furniture.js';
+
 const canvas = document.getElementById('gl-canvas');
 const status = document.getElementById('status');
 const gl = canvas.getContext('webgl2');
@@ -48,11 +50,33 @@ function quad(a, b, c, d, color) {
     colors.push(...color);
   }
 }
-// Room dimensions: x=-3..3, z=-3..3, y=0..3.
-// Floor, rear wall, and left wall (front and right sides stay open).
-quad([-3,0,-3], [3,0,-3], [3,0,3], [-3,0,3], [0.73,0.53,0.40]);
-quad([-3,0,-3], [-3,3,-3], [3,3,-3], [3,0,-3], [0.91,0.77,0.84]);
-quad([-3,0,3], [-3,3,3], [-3,3,-3], [-3,0,-3], [0.97,0.87,0.88]);
+
+// Phase 3: Larger cozy bedroom
+// Room dimensions: 10 wide, 10 deep, 3.5 high.
+
+// Floor
+quad(
+  [-5,0,-5], [5,0,-5],
+  [5,0,5], [-5,0,5],
+  [0.73,0.53,0.40]
+);
+
+// Back wall
+quad(
+  [-5,0,-5], [-5,3.5,-5],
+  [5,3.5,-5], [5,0,-5],
+  [0.91,0.77,0.84]
+);
+
+// Left wall
+quad(
+  [-5,0,5], [-5,3.5,5],
+  [-5,3.5,-5], [-5,0,-5],
+  [0.97,0.87,0.88]
+);
+
+// Phase 3: Add a 3D bed to the room.
+addBed(positions, colors);
 
 const vao = gl.createVertexArray();
 gl.bindVertexArray(vao);
@@ -93,12 +117,36 @@ function lookAt(eye, target, up) {
 }
 
 gl.enable(gl.DEPTH_TEST);
-gl.clearColor(0.93, 0.94, 0.98, 1);
+// Resize the drawing buffer to match the screen.
+const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+canvas.width = Math.round(canvas.clientWidth * pixelRatio);
+canvas.height = Math.round(canvas.clientHeight * pixelRatio);
+
+// Navy blue background
+gl.clearColor(0.06, 0.11, 0.20, 1);
+
 gl.viewport(0, 0, canvas.width, canvas.height);
-const projection = perspective(Math.PI/4, canvas.width/canvas.height, 0.1, 100);
-const view = lookAt([9,7,10], [0,1,0], [0,1,0]);
+
+// Perspective camera
+const projection = perspective(
+  Math.PI / 4,
+  canvas.width / canvas.height,
+  0.1,
+  100
+);
+
+// Move the camera closer so the room appears larger.
+const view = lookAt(
+  [12, 9, 13],
+  [0, 1.5, 0],
+  [0, 1, 0]
+);
+
+
 gl.uniformMatrix4fv(gl.getUniformLocation(program, 'uMVP'), false, multiply(projection, view));
 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 gl.bindVertexArray(vao);
 gl.drawArrays(gl.TRIANGLES, 0, positions.length/3);
 status.textContent = 'Phase 2 complete: floor and two walls drawn with WebGL2.';
+
