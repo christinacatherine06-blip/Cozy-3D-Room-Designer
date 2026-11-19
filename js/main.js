@@ -7,6 +7,8 @@ import {
   addRug
 } from './furniture.js';
 
+import { createClockRenderer } from './clockAnimation.js';
+
 const canvas = document.getElementById('gl-canvas');
 const status = document.getElementById('status');
 const gl = canvas.getContext('webgl2');
@@ -157,8 +159,35 @@ const view = lookAt(
 
 
 gl.uniformMatrix4fv(gl.getUniformLocation(program, 'uMVP'), false, multiply(projection, view));
-gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-gl.bindVertexArray(vao);
-gl.drawArrays(gl.TRIANGLES, 0, positions.length/3);
-status.textContent = 'Phase 2 complete: floor and two walls drawn with WebGL2.';
+
+// Phase 6: Render the bedroom and animate the wall clock
+
+const drawClock = createClockRenderer(gl, program);
+
+function render() {
+  // Clear the previous frame
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  // Use our custom GLSL shader program
+  gl.useProgram(program);
+
+  // Draw the room and all static furniture
+  gl.bindVertexArray(vao);
+  gl.drawArrays(
+    gl.TRIANGLES,
+    0,
+    positions.length / 3
+  );
+
+  // Draw the clock using the current time
+  drawClock(new Date());
+
+  // Request the next animation frame
+  requestAnimationFrame(render);
+}
+
+// Start the animation
+requestAnimationFrame(render);
+
+status.textContent = 'Room and animated clock running.';
 
