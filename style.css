@@ -1,5 +1,5 @@
 
-/* Full-screen Cozy 3D Room Designer */
+/* Cozy 3D Room Designer */
 
 * {
   margin: 0;
@@ -7,7 +7,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -17,8 +18,55 @@ body {
   background-color: #101d35;
 }
 
+/* Full-screen 3D canvas */
 #gl-canvas {
   display: block;
   width: 100vw;
   height: 100vh;
+}
+
+/* Day and Night controls */
+.lighting-controls {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  padding: 12px 18px;
+  background: rgba(255, 245, 248, 0.92);
+  border-radius: 16px;
+
+  z-index: 100;
+}
+
+/* Button appearance */
+.lighting-controls button {
+  background-color: #ffe5ef;
+  color: #65445a;
+
+  border: 2px solid #e7a6c0;
+  border-radius: 12px;
+
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+/* Hover effect */
+.lighting-controls button:hover {
+  background-color: #f8c4d8;
+}
+
+/* Selected mode */
+.lighting-controls button.active {
+  background-color: #d98eae;
+  color: white;
+  border-color: #c97b9d;
 }

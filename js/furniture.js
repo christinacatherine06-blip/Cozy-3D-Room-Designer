@@ -11,8 +11,8 @@ export function addBed(positions, colors) {
   const pink = [0.91, 0.65, 0.75];
 
   // Bed position
-  const x = -2.7;
-  const z = -2.4;
+  const x = -2.5;
+  const z = -1.89;
 
   // Wooden bed frame
   addBox(positions, colors,
@@ -61,8 +61,8 @@ export function addStudyDesk(positions, colors) {
   const white = [0.96, 0.96, 0.95];
 
   // Desk positioned toward the right side of the room.
-  const x = 2.5;
-  const z = -3.4;
+  const x = 2.1;
+  const z = -3.0;
 
   // Wooden desktop
   addBox(positions, colors,
@@ -165,8 +165,8 @@ export function addWardrobe(positions, colors) {
   const gold = [0.85, 0.68, 0.38];
 
   // Wardrobe positioned against the left wall
-  const x = -4.45;
-  const z = 0.5;
+  const x = -3.45;
+  const z = 1.5;
 
   // Main wooden cabinet
   addBox(positions, colors,
@@ -214,7 +214,7 @@ export function addRug(positions, colors) {
   const cream = [0.99, 0.92, 0.84];
 
   const x = 0.2;
-  const z = 2.0;
+  const z = 1.6;
 
   // Bigger bottom layer
   addBox(positions, colors,

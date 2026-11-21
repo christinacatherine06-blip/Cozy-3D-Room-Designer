@@ -8,12 +8,12 @@ export function createClockGeometry(date = new Date()) {
   const positions = [];
   const colors = [];
 
-  const cx = 0;
+  const cx = -2.35;
   const cy = 2.55;
   const radius = 0.48;
 
   // Clock mounted on the back wall (z = -5)
-  const faceZ = -4.91;
+  const faceZ = -3.88;
 
   const wood = [0.62, 0.39, 0.28];
   const cream = [0.99, 0.96, 0.89];
@@ -142,5 +142,23 @@ export function createClockGeometry(date = new Date()) {
     );
   }
 
-  return { positions, colors };
+  
+  // Phase 8: Move the animated clock to the left wall.
+  //
+  // Original clock geometry lies on the back wall.
+  // Rotate it 90 degrees around the Y axis so it
+  // faces into the room from the left wall.
+
+  
+  
+  
+  // Phase 8: Clock mounted above the study desk.
+  // The clock already faces into the room.
+  // No rotation or position transformation is needed.
+
+  return {
+    positions,
+    colors
+  };
 }
+
